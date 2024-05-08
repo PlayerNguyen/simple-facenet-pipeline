@@ -12,7 +12,7 @@ DATASET_FOLDER = './datasets'
 # Load devices and models
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 # Load face features model
-resnet = InceptionResnetV1(pretrained="vggface2").eval()
+resnet = InceptionResnetV1(pretrained="vggface2", device=device).eval()
 # Load face detector model
 mtcnn = MTCNN(image_size=160, margin=40, keep_all=False, device=device)
 
@@ -42,7 +42,7 @@ def init():
           names.append(dataset.idx_to_class[y])
   
   aligned = torch.stack(aligned).to(device)
-  embeddings = resnet(aligned).detach().cpu()
+  embeddings = resnet(aligned).detach()
   
   return aligned, names, embeddings
 
