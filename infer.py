@@ -3,7 +3,6 @@ import cv2
 from facenet_pytorch import MTCNN, InceptionResnetV1
 from torchvision import datasets
 from torch.utils.data import DataLoader
-from torchvision.utils import save_image
 import torch
 
 
