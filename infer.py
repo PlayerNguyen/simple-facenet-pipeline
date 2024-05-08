@@ -10,10 +10,13 @@ DATASET_FOLDER = './datasets'
 
 # Load devices and models
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
 # Load face features model
 resnet = InceptionResnetV1(pretrained="vggface2", device=device).eval()
 # Load face detector model
 mtcnn = MTCNN(image_size=160, margin=40, keep_all=False, device=device)
+print(resnet.device)
+print(mtcnn.device)
 
 def collate_fn(x):
   return x[0]
@@ -63,7 +66,7 @@ def capture(aligned, names, embeddings):
     scaled = cv2.resize(frame, (0, 0), fx=.25, fy=.25)
     current_face = mtcnn(scaled)
     if current_face is not None:
-      current_face_emb = resnet(current_face.unsqueeze(0))
+      current_face_emb = resnet(current_face.unsqueeze(0).cuda())
       for (idx, embedding) in enumerate(embeddings):
         distance = (current_face_emb - embedding).norm().item()
         
